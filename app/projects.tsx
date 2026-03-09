@@ -62,7 +62,6 @@ export default function Projects() {
     setActiveTags((prev) => prev.filter((t) => t !== tag));
   }
 
-  // Close suggestions on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -74,18 +73,17 @@ export default function Projects() {
   }, []);
 
   return (
-    <section className="px-8 pt-10 pb-20 sm:px-16 lg:px-[7.5rem]">
-      <h2 className="text-[1rem] font-medium tracking-[0.125rem] text-[#6D6C6A] uppercase">
+    <section className="px-8 pt-10 pb-16 sm:px-16 lg:px-16">
+      <h2 className="text-xs font-medium tracking-[0.5px] text-[#9CA3AF] uppercase">
         Projects
       </h2>
 
       {/* Search + active filters */}
-      <div className="mt-8 flex flex-wrap items-start gap-3">
-        {/* Search input */}
+      <div className="mt-6 flex flex-wrap items-center gap-3">
         <div ref={wrapperRef} className="relative w-64">
-          <div className="flex items-center gap-2 border border-[#E5E0D8] bg-white px-3 py-2 focus-within:border-[#D1D0CD]">
+          <div className="flex items-center gap-2 rounded-sm border border-[#E8E6E1] bg-[#F7F6F3] px-3 py-2 focus-within:border-[#D1D5DB]">
             <svg
-              className="h-3.5 w-3.5 shrink-0 text-[#9C9B99]"
+              className="h-3.5 w-3.5 shrink-0 text-[#9CA3AF]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -106,18 +104,17 @@ export default function Projects() {
               }}
               onFocus={() => setOpen(true)}
               placeholder="Filter by tech..."
-              className="w-full bg-transparent text-sm text-[#1A1918] placeholder-[#B5B4B2] outline-none"
+              className="w-full bg-transparent text-xs text-[#2D2D2D] placeholder-[#9CA3AF] outline-none"
             />
           </div>
 
-          {/* Suggestions dropdown */}
           {open && suggestions.length > 0 && (
-            <ul className="absolute z-10 mt-0 w-full border border-[#E5E0D8] bg-white py-1">
+            <ul className="absolute z-10 mt-0 w-full rounded-sm border border-[#E8E6E1] bg-white py-1">
               {suggestions.map((tag) => (
                 <li key={tag}>
                   <button
                     onClick={() => addTag(tag)}
-                    className="w-full px-3.5 py-2 text-left text-sm text-[#6D6C6A] transition-colors hover:bg-[#F5F0E8] hover:text-[#1A1918]"
+                    className="w-full px-3.5 py-2 text-left text-xs text-[#6B7280] transition-colors hover:bg-[#F0EFEC] hover:text-[#2D2D2D]"
                   >
                     {tag}
                   </button>
@@ -127,14 +124,13 @@ export default function Projects() {
           )}
         </div>
 
-        {/* Active filter pills */}
         {activeTags.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             {activeTags.map((tag) => (
               <button
                 key={tag}
                 onClick={() => removeTag(tag)}
-                className="flex items-center gap-1.5 bg-[#1A1918] px-3 py-1.5 text-sm text-[#F5F0E8] transition-colors hover:bg-[#333]"
+                className="flex items-center gap-1.5 rounded-sm bg-[#2D2D2D] px-2 py-1 font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[#F7F6F3] transition-colors hover:bg-[#444]"
               >
                 {tag}
                 <svg
@@ -154,7 +150,7 @@ export default function Projects() {
             ))}
             <button
               onClick={() => setActiveTags([])}
-              className="px-2 py-1.5 text-sm text-[#B5B4B2] transition-colors hover:text-[#6D6C6A]"
+              className="px-2 py-1 text-[11px] text-[#9CA3AF] transition-colors hover:text-[#6B7280]"
             >
               Clear all
             </button>
@@ -168,19 +164,20 @@ export default function Projects() {
           <a
             key={project.title}
             href={project.href}
-            className="group flex flex-col gap-3 border border-[#E5E0D8] bg-white p-6 transition-colors hover:border-[#D1D0CD]"
+            className="group flex flex-col gap-3 rounded-sm border border-[#E8E6E1] bg-transparent p-6 transition-colors hover:border-[#D1D5DB]"
           >
-            <h3 className="text-[1.375rem] font-medium text-[#1A1918]">
+            <div className="h-0.5 w-6 rounded-sm bg-[#C53D43]" />
+            <h3 className="text-base font-medium text-[#2D2D2D]">
               {project.title}
             </h3>
-            <p className="text-[1rem] leading-[1.5] text-[#9C9B99]">
+            <p className="text-[13px] leading-[1.5] text-[#6B7280]">
               {project.description}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="mt-auto flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-[#EDECEA] px-2.5 py-1 text-[0.875rem] text-[#6D6C6A]"
+                  className="rounded-sm bg-[#F0EFEC] px-2 py-[0.1875rem] font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[#6B7280]"
                 >
                   {tag}
                 </span>
@@ -190,9 +187,8 @@ export default function Projects() {
         ))}
       </div>
 
-      {/* Empty state */}
       {filtered.length === 0 && (
-        <p className="mt-8 text-base text-[#B5B4B2]">
+        <p className="mt-8 text-sm text-[#9CA3AF]">
           No projects match the selected filters.
         </p>
       )}

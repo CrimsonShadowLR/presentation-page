@@ -2,16 +2,17 @@ import Projects from "./projects";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-[#1A1918] font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen bg-[#F7F6F3] text-[#2D2D2D] font-[family-name:var(--font-sora)]">
       {/* Hero */}
-      <section className="px-8 pt-16 pb-12 sm:px-16 lg:px-[7.5rem] lg:pt-[7.5rem] lg:pb-[5rem]">
-        <h1 className="text-6xl font-semibold tracking-[-0.125rem] text-[#1A1918] lg:text-[4rem]">
+      <section className="flex flex-col gap-3 px-8 pt-16 pb-12 sm:px-16 lg:px-16 lg:pt-20 lg:pb-12">
+        <h1 className="text-5xl font-light tracking-[-1px] text-[#2D2D2D] lg:text-[48px]">
           Your Name
         </h1>
-        <p className="mt-4 text-xl text-[#6D6C6A] lg:text-[1.5rem]">
+        <p className="text-sm font-medium tracking-[0.5px] text-[#3D5A80]">
           Web &amp; Software Developer
         </p>
-        <p className="mt-4 max-w-[35rem] text-lg leading-[1.6] text-[#9C9B99]">
+        <div className="h-0.5 w-8 rounded-sm bg-[#C53D43]" />
+        <p className="max-w-[30rem] text-sm leading-[1.6] text-[#6B7280]">
           I build clean, performant applications with modern technologies.
           Focused on crafting thoughtful user experiences and reliable systems.
         </p>
@@ -20,16 +21,16 @@ export default function Home() {
       <Projects />
 
       {/* Footer */}
-      <footer className="flex flex-col items-center justify-between gap-4 border-t border-[#E5E0D8] px-8 py-10 sm:flex-row sm:px-16 lg:px-[7.5rem]">
-        <span className="text-[0.9375rem] text-[#9C9B99]">&copy; 2026 Your Name</span>
-        <div className="flex gap-6">
-          <a href="#" className="text-[0.9375rem] text-[#6D6C6A] hover:text-[#1A1918] transition-colors">
+      <footer className="flex flex-col items-center justify-between gap-4 border-t border-[#E8E6E1] px-8 py-8 sm:flex-row sm:px-16 lg:px-16">
+        <span className="text-xs text-[#9CA3AF]">&copy; 2026 Your Name</span>
+        <div className="flex gap-5">
+          <a href="#" className="text-xs text-[#6B7280] hover:text-[#2D2D2D] transition-colors">
             GitHub
           </a>
-          <a href="#" className="text-[0.9375rem] text-[#6D6C6A] hover:text-[#1A1918] transition-colors">
+          <a href="#" className="text-xs text-[#6B7280] hover:text-[#2D2D2D] transition-colors">
             LinkedIn
           </a>
-          <a href="#" className="text-[0.9375rem] text-[#6D6C6A] hover:text-[#1A1918] transition-colors">
+          <a href="#" className="text-xs text-[#6B7280] hover:text-[#2D2D2D] transition-colors">
             Email
           </a>
         </div>
