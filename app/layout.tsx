@@ -14,7 +14,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Your Name — Developer",
+  title: "Leandro Lazo — Developer",
   description: "Web & Software Developer portfolio",
 };
 
