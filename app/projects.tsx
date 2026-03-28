@@ -26,11 +26,28 @@ const projects = [
   },
 ];
 
+function useInView(threshold = 0.15) {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+}
+
 export default function Projects() {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const { ref: sectionRef, visible } = useInView();
 
   const allTags = useMemo(
     () => [...new Set(projects.flatMap((p) => p.tags))],
@@ -73,8 +90,13 @@ export default function Projects() {
   }, []);
 
   return (
-    <section className="px-8 pt-10 pb-16 sm:px-16 lg:px-16">
-      <h2 className="text-xs font-medium tracking-[0.5px] text-[#9CA3AF] uppercase">
+    <section
+      ref={sectionRef as React.RefObject<HTMLElement>}
+      className="px-8 pt-10 pb-16 sm:px-16 lg:px-16"
+    >
+      <h2
+        className={`text-xs font-medium tracking-[0.5px] text-[#9CA3AF] uppercase ${visible ? "animate-fade-up" : "opacity-0"}`}
+      >
         Projects
       </h2>
 
@@ -160,11 +182,12 @@ export default function Projects() {
 
       {/* Project grid */}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((project) => (
+        {filtered.map((project, i) => (
           <a
             key={project.title}
             href={project.href}
-            className="group flex flex-col gap-3 rounded-sm border border-[#E8E6E1] bg-transparent p-6 transition-colors hover:border-[#D1D5DB]"
+            className={`group flex flex-col gap-3 rounded-sm border border-[#E8E6E1] bg-transparent p-6 transition-colors hover:border-[#D1D5DB] ${visible ? "animate-fade-up" : "opacity-0"}`}
+            style={visible ? { animationDelay: `${i * 80 + 80}ms` } : undefined}
           >
             <div className="h-0.5 w-6 rounded-sm bg-[#C53D43]" />
             <h3 className="text-base font-medium text-[#2D2D2D]">
