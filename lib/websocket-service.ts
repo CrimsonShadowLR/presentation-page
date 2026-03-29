@@ -122,7 +122,7 @@ export class WebSocketService {
   private onConnectionChange: ConnectionHandler | null = null;
 
   constructor(url?: string) {
-    this.url = url || process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3001';
+    this.url = url || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
   }
 
   /**
