@@ -4,25 +4,11 @@ import { useState, useMemo, useRef, useEffect } from "react";
 
 const projects = [
   {
-    title: "Portfolio Site",
+    title: "Game Simulator",
     description:
-      "A personal portfolio built with Next.js and Tailwind CSS to showcase projects and skills.",
-    tags: ["Next.js", "Tailwind"],
-    href: "#",
-  },
-  {
-    title: "Task Manager",
-    description:
-      "A full-stack task management app with real-time updates and team collaboration features.",
-    tags: ["React", "Node.js"],
-    href: "#",
-  },
-  {
-    title: "CLI Tool",
-    description:
-      "A command-line utility for automating repetitive development workflows.",
-    tags: ["Rust", "CLI"],
-    href: "#",
+      "Real-time risk-based game with a NestJS WebSocket backend. Binary MessagePack protocol over Socket.io, cryptographic RNG, in-memory session state, and live P&L tracking.",
+    tags: ["NestJS", "Next.js", "WebSocket", "TypeScript", "Socket.io"],
+    href: "/game",
   },
 ];
 
