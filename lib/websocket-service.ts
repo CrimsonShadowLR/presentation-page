@@ -1,9 +1,9 @@
 /**
  * WebSocket Service for Game Simulator
  * Handles binary protocol communication with backend using MessagePack
+ * Uses native browser WebSocket (no socket.io dependency)
  */
 
-import { io, Socket } from 'socket.io-client';
 import { pack, unpack } from 'msgpackr';
 
 // Message types matching backend protocol
@@ -107,11 +107,13 @@ export type ConnectionHandler = (connected: boolean) => void;
  * Manages connection, encoding/decoding, and message routing
  */
 export class WebSocketService {
-  private socket: Socket | null = null;
+  private socket: WebSocket | null = null;
   private url: string;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 10;
-  private reconnectDelay = 1000; // Start with 1 second
+  private reconnectDelay = 1000;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private intentionalClose = false;
 
   // Event handlers
   private onRoundResult: RoundResultHandler | null = null;
@@ -122,38 +124,89 @@ export class WebSocketService {
   private onConnectionChange: ConnectionHandler | null = null;
 
   constructor(url?: string) {
-    this.url = url || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+    const baseUrl = url || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+    // Convert http(s) to ws(s) for native WebSocket
+    this.url = baseUrl.replace(/^https/, 'wss').replace(/^http/, 'ws');
   }
 
   /**
    * Connect to WebSocket server
    */
   connect(): void {
-    if (this.socket?.connected) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       console.log('WebSocket already connected');
       return;
     }
 
+    this.intentionalClose = false;
+    this.doConnect();
+  }
+
+  private doConnect(): void {
     console.log(`Connecting to WebSocket at ${this.url}`);
 
-    this.socket = io(this.url, {
-      transports: ['websocket'],
-      upgrade: false,
-      reconnection: true,
-      reconnectionDelay: this.reconnectDelay,
-      reconnectionDelayMax: 30000,
-      reconnectionAttempts: this.maxReconnectAttempts,
-    });
+    try {
+      this.socket = new WebSocket(this.url);
+      this.socket.binaryType = 'arraybuffer';
+    } catch (error) {
+      console.error('Failed to create WebSocket:', error);
+      this.scheduleReconnect();
+      return;
+    }
 
-    this.setupListeners();
+    this.socket.onopen = () => {
+      console.log('WebSocket connected');
+      this.reconnectAttempts = 0;
+      this.reconnectDelay = 1000;
+      this.notifyConnectionChange(true);
+    };
+
+    this.socket.onclose = (event) => {
+      console.log('WebSocket disconnected:', event.code, event.reason);
+      this.notifyConnectionChange(false);
+
+      if (!this.intentionalClose) {
+        this.scheduleReconnect();
+      }
+    };
+
+    this.socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    this.socket.onmessage = (event: MessageEvent) => {
+      this.handleMessage(event);
+    };
+  }
+
+  private scheduleReconnect(): void {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.error('Max reconnection attempts reached');
+      return;
+    }
+
+    const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts), 30000);
+    console.log(`Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1})`);
+
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectAttempts++;
+      this.doConnect();
+    }, delay);
   }
 
   /**
    * Disconnect from WebSocket server
    */
   disconnect(): void {
+    this.intentionalClose = true;
+
+    if (this.reconnectTimer !== null) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
     if (this.socket) {
-      this.socket.disconnect();
+      this.socket.close();
       this.socket = null;
       this.notifyConnectionChange(false);
     }
@@ -163,87 +216,50 @@ export class WebSocketService {
    * Check if connected
    */
   isConnected(): boolean {
-    return this.socket?.connected || false;
-  }
-
-  /**
-   * Setup WebSocket event listeners
-   */
-  private setupListeners(): void {
-    if (!this.socket) return;
-
-    // Connection events
-    this.socket.on('connect', () => {
-      console.log('WebSocket connected');
-      this.reconnectAttempts = 0;
-      this.notifyConnectionChange(true);
-    });
-
-    this.socket.on('disconnect', (reason) => {
-      console.log('WebSocket disconnected:', reason);
-      this.notifyConnectionChange(false);
-    });
-
-    this.socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
-      this.reconnectAttempts++;
-
-      if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-        console.error('Max reconnection attempts reached');
-        this.notifyConnectionChange(false);
-      }
-    });
-
-    // Binary message handler - backend sends responses via 'binary' named event
-    this.socket.on('binary', (buffer: ArrayBuffer | Buffer) => {
-      this.handleBinaryMessage(buffer);
-    });
+    return this.socket !== null && this.socket.readyState === WebSocket.OPEN;
   }
 
   /**
    * Handle incoming binary message
    */
-  private handleBinaryMessage(buffer: ArrayBuffer | Buffer): void {
+  private handleMessage(event: MessageEvent): void {
     try {
-      // Decode MessagePack binary data
-      const data = buffer instanceof ArrayBuffer ? new Uint8Array(buffer) : buffer;
-      const raw = unpack(data) as { type: number };
+      const data = unpack(new Uint8Array(event.data as ArrayBuffer)) as { type: number };
 
-      // Route to appropriate handler based on message type
-      switch (raw.type) {
+      switch (data.type) {
         case MessageType.ROUND_RESULT:
           if (this.onRoundResult) {
-            this.onRoundResult(raw as unknown as RoundResultResponse);
+            this.onRoundResult(data as unknown as RoundResultResponse);
           }
           break;
 
         case MessageType.HISTORY_RESPONSE:
           if (this.onHistory) {
-            this.onHistory(raw as unknown as HistoryResponse);
+            this.onHistory(data as unknown as HistoryResponse);
           }
           break;
 
         case MessageType.STATS_RESPONSE:
           if (this.onStats) {
-            this.onStats(raw as unknown as StatsResponse);
+            this.onStats(data as unknown as StatsResponse);
           }
           break;
 
         case MessageType.ERROR:
-          console.error('Server error:', raw);
+          console.error('Server error:', data);
           if (this.onError) {
-            this.onError(raw as unknown as ErrorResponse);
+            this.onError(data as unknown as ErrorResponse);
           }
           break;
 
         case MessageType.STATE_UPDATE:
           if (this.onStateUpdate) {
-            this.onStateUpdate(raw as unknown as StateUpdateResponse);
+            this.onStateUpdate(data as unknown as StateUpdateResponse);
           }
           break;
 
         default:
-          console.warn('Unknown message type:', raw.type);
+          console.warn('Unknown message type:', data.type);
       }
     } catch (error) {
       console.error('Error decoding binary message:', error);
@@ -251,22 +267,16 @@ export class WebSocketService {
   }
 
   /**
-   * Send binary message to server.
-   * The backend intercepts raw engine.io message packets where
-   * packet.data is a Buffer. Using socket.send() with a Buffer
-   * sends a socket.io MESSAGE type packet at the engine.io level,
-   * making packet.data a Buffer on the server side.
+   * Send binary message to server
    */
   private sendBinary(message: object): void {
-    if (!this.socket?.connected) {
+    if (!this.isConnected()) {
       throw new Error('WebSocket not connected');
     }
 
     try {
       const buffer = pack(message);
-      // Use send() instead of emit() so the server receives a raw
-      // engine.io 'message' packet with packet.data as a Buffer
-      this.socket.send(buffer);
+      this.socket!.send(buffer);
     } catch (error) {
       console.error('Error encoding message:', error);
       throw error;
