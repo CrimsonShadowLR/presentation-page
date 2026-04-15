@@ -10,6 +10,14 @@ const projects = [
     tags: ["NestJS", "Next.js", "WebSocket", "TypeScript", "Socket.io"],
     href: "/game",
   },
+  {
+    title: "Nieto Segunda Vuelta",
+    description:
+      "Real-time electoral tracker for Peru's 2026 presidential race. Polls ONPE's official endpoint every 30 seconds, proxies candidate photos to avoid CORS, and computes live vote gaps and ranking positions.",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Playwright"],
+    href: "https://nietosegundavuelta.vercel.app/",
+    external: true,
+  },
 ];
 
 function useInView(threshold = 0.15) {
@@ -172,6 +180,7 @@ export default function Projects() {
           <a
             key={project.title}
             href={project.href}
+            {...(project.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             className={`group flex flex-col gap-3 rounded-sm border border-[#E8E6E1] bg-transparent p-6 transition-colors hover:border-[#D1D5DB] ${visible ? "animate-fade-up" : "opacity-0"}`}
             style={visible ? { animationDelay: `${i * 80 + 80}ms` } : undefined}
           >

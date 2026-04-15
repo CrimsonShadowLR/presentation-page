@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# tools / reports
+.playwright-mcp/
+.unlighthouse/
+.claude/
+
+# assets / design
+*.png
+*.pen
+
+# markdown (except README)
+*.md
+!README.md
