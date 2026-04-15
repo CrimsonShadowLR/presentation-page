@@ -4,7 +4,10 @@
  * Uses native browser WebSocket (no socket.io dependency)
  */
 
-import { pack, unpack } from 'msgpackr';
+import { pack, Unpackr } from 'msgpackr';
+
+const unpackr = new Unpackr({ int64AsNumber: true, useRecords: false });
+const unpack = (buf: Uint8Array) => unpackr.unpack(buf);
 
 // Message types matching backend protocol
 export enum MessageType {

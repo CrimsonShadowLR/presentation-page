@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { GameProvider } from '@/contexts/GameContext';
-import { GameSimulator } from '@/components/game-simulator/GameSimulator';
+import { DualGameProvider } from '@/contexts/DualGameContext';
+import { DualGameSimulator } from '@/components/game-simulator/DualGameSimulator';
+import { WsComparisonPanel } from '@/components/game-simulator/WsComparisonPanel';
 
 export const metadata: Metadata = {
   title: 'Game Simulator — Leandro Lazo',
   description:
-    'Real-time risk-based game with a NestJS WebSocket backend using binary MessagePack over Socket.io.',
+    'Real-time risk-based game comparing NestJS and Python asyncio WebSocket backends using binary MessagePack.',
 };
 
 export default function GamePage() {
@@ -21,10 +22,14 @@ export default function GamePage() {
         </Link>
       </header>
 
-      <main className="flex-1">
-        <GameProvider>
-          <GameSimulator />
-        </GameProvider>
+      <main className="flex-1 flex flex-col">
+        <DualGameProvider>
+          <DualGameSimulator />
+        </DualGameProvider>
+
+        <div className="border-t border-[var(--border-color)]">
+          <WsComparisonPanel />
+        </div>
       </main>
     </div>
   );
