@@ -113,8 +113,8 @@ export class WebSocketService {
   private socket: WebSocket | null = null;
   private url: string;
   private reconnectAttempts = 0;
-  private maxReconnectAttempts = 10;
-  private reconnectDelay = 1000;
+  private maxReconnectAttempts = Infinity;
+  private reconnectDelay = 2000;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private intentionalClose = false;
 
@@ -183,12 +183,7 @@ export class WebSocketService {
   }
 
   private scheduleReconnect(): void {
-    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error('Max reconnection attempts reached');
-      return;
-    }
-
-    const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts), 30000);
+    const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts), 60000);
     console.log(`Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1})`);
 
     this.reconnectTimer = setTimeout(() => {
