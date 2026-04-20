@@ -60,7 +60,10 @@ export interface DualGameContextState {
   python: BackendState;
   go: BackendState;
   roundHistory: RoundHistoryEntry[];
+  isSimulating: boolean;
+  simulatingRoundsLeft: number;
   playRound: (betAmount: number, riskLevel: RiskLevel) => void;
+  playMultiRound: (count: number, betAmount: number, riskLevel: RiskLevel) => void;
   resetGame: (initialBalance: number) => void;
 }
 
@@ -134,6 +137,15 @@ export function DualGameProvider({ children }: { children: ReactNode }) {
   const roundIndexRef = useRef(0);
   const currentAccRef = useRef<RoundAccumulator | null>(null);
 
+  // Multi-round simulation state
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [simulatingRoundsLeft, setSimulatingRoundsLeft] = useState(0);
+  const isSimulatingRef = useRef(false);
+  const remainingRoundsRef = useRef(0);
+  const simulationBetRef = useRef(0);
+  const simulationRiskRef = useRef<RiskLevel>('medium');
+  const playRoundRef = useRef<() => void>(() => {});
+
   const nodeServiceRef = useRef<WebSocketService>(
     new WebSocketService(
       process.env.NEXT_PUBLIC_WS_NODE_URL || 'ws://localhost:3001'
@@ -174,6 +186,19 @@ export function DualGameProvider({ children }: { children: ReactNode }) {
 
     currentAccRef.current = null;
     roundIndexRef.current += 1;
+
+    // Advance simulation if active
+    if (isSimulatingRef.current) {
+      if (remainingRoundsRef.current > 0) {
+        remainingRoundsRef.current -= 1;
+        setSimulatingRoundsLeft(remainingRoundsRef.current);
+        setTimeout(() => playRoundRef.current(), 50);
+      } else {
+        isSimulatingRef.current = false;
+        setIsSimulating(false);
+        setSimulatingRoundsLeft(0);
+      }
+    }
   }, []);
 
   // Node handlers
@@ -514,6 +539,25 @@ export function DualGameProvider({ children }: { children: ReactNode }) {
     [tryFinalizeRound]
   );
 
+  useEffect(() => {
+    playRoundRef.current = () =>
+      playRound(simulationBetRef.current, simulationRiskRef.current);
+  }, [playRound]);
+
+  const playMultiRound = useCallback(
+    (count: number, betAmount: number, riskLevel: RiskLevel) => {
+      if (isSimulatingRef.current || count <= 0) return;
+      simulationBetRef.current = betAmount;
+      simulationRiskRef.current = riskLevel;
+      remainingRoundsRef.current = count - 1;
+      isSimulatingRef.current = true;
+      setIsSimulating(true);
+      setSimulatingRoundsLeft(count - 1);
+      playRound(betAmount, riskLevel);
+    },
+    [playRound]
+  );
+
   const resetGame = useCallback(
     (initialBalance: number) => {
       const nodeSvc = nodeServiceRef.current!;
@@ -573,7 +617,10 @@ export function DualGameProvider({ children }: { children: ReactNode }) {
     python: pythonState,
     go: goState,
     roundHistory,
+    isSimulating,
+    simulatingRoundsLeft,
     playRound,
+    playMultiRound,
     resetGame,
   };
 

@@ -259,7 +259,7 @@ const riskOptions: { level: RiskLevel; label: string; multiplier: string }[] = [
 ];
 
 export function DualGameSimulator() {
-  const { node, python, go, roundHistory, playRound, resetGame } = useDualGame();
+  const { node, python, go, roundHistory, isSimulating, simulatingRoundsLeft, playRound, playMultiRound, resetGame } = useDualGame();
 
   const [selectedRisk, setSelectedRisk] = useState<RiskLevel>('medium');
   const [betInput, setBetInput] = useState('100.00');
@@ -285,6 +285,7 @@ export function DualGameSimulator() {
 
   const canPlay =
     !isPending &&
+    !isSimulating &&
     anyConnected &&
     betAmountCents > 0 &&
     minBalance >= betAmountCents;
@@ -385,23 +386,39 @@ export function DualGameSimulator() {
           </div>
         </div>
 
-        {/* Play button */}
-        <button
-          onClick={handlePlay}
-          disabled={!canPlay}
-          className={`flex items-center justify-center gap-2 h-14 rounded-xl transition-opacity ${
-            !canPlay
-              ? 'bg-[var(--text-muted)] cursor-not-allowed'
-              : 'bg-[var(--cyan-primary)] hover:opacity-90'
-          }`}
-        >
-          <Play
-            className="w-5 h-5 fill-current text-white"
-          />
-          <span className="text-base font-bold tracking-[3px] text-white">
-            {isPending ? 'PLAYING...' : 'PLAY'}
-          </span>
-        </button>
+        {/* Play buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={handlePlay}
+            disabled={!canPlay}
+            className={`flex flex-1 items-center justify-center gap-2 h-14 rounded-xl transition-opacity ${
+              !canPlay
+                ? 'bg-[var(--text-muted)] cursor-not-allowed opacity-40'
+                : 'bg-[var(--cyan-primary)] hover:opacity-90'
+            }`}
+          >
+            <Play className="w-5 h-5 fill-current text-white" />
+            <span className="text-base font-bold tracking-[3px] text-white">
+              {isPending && !isSimulating ? 'PLAYING...' : 'PLAY'}
+            </span>
+          </button>
+          <button
+            onClick={() => playMultiRound(10, betAmountCents, selectedRisk)}
+            disabled={!canPlay}
+            className={`flex items-center justify-center gap-2 h-14 px-6 rounded-xl border transition-all ${
+              !canPlay
+                ? 'border-[var(--border-color)] cursor-not-allowed opacity-40'
+                : 'border-[var(--cyan-primary)] hover:bg-[var(--cyan-primary)] hover:bg-opacity-10'
+            } ${isSimulating ? 'border-[var(--cyan-primary)]' : ''}`}
+          >
+            <span
+              className="text-sm font-bold tracking-[2px]"
+              style={{ color: isSimulating ? 'var(--cyan-primary)' : 'var(--text-secondary)' }}
+            >
+              {isSimulating ? `${simulatingRoundsLeft} LEFT` : 'PLAY ×10'}
+            </span>
+          </button>
+        </div>
         <p className="text-[10px] text-center text-[var(--text-muted)]">
           {!anyConnected
             ? 'Connecting to backends...'
