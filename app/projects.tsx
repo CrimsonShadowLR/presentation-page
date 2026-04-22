@@ -11,6 +11,14 @@ const projects = [
     href: "/game",
   },
   {
+    title: "Kanji Summary",
+    description:
+      "JLPT vocabulary and kanji reference covering N5 through N1. Browse curated word lists and kanji per level, with N5 and N4 fully available.",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+    href: "https://kanjisummary.vercel.app/",
+    external: true,
+  },
+  {
     title: "Nieto Segunda Vuelta",
     description:
       "Real-time electoral tracker for Peru's 2026 presidential race. Polls ONPE's official endpoint every 30 seconds, proxies candidate photos to avoid CORS, and computes live vote gaps and ranking positions.",
