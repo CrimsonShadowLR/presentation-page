@@ -9,6 +9,8 @@ const projects = [
       "Real-time risk-based game comparing NestJS, Python asyncio, and Go WebSocket backends. Binary MessagePack protocol, cryptographic RNG, in-memory session state, and live P&L tracking.",
     tags: ["NestJS", "Python", "Go", "Next.js", "WebSocket", "TypeScript", "MessagePack"],
     href: "/game",
+    gradient: "from-violet-600 via-indigo-600 to-blue-600",
+    icon: "🎲",
   },
   {
     title: "Kanji Summary",
@@ -17,6 +19,8 @@ const projects = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
     href: "https://kanjisummary.vercel.app/",
     external: true,
+    gradient: "from-red-600 via-rose-600 to-orange-500",
+    icon: "日本語",
   },
   {
     title: "Nieto Segunda Vuelta",
@@ -25,6 +29,8 @@ const projects = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Playwright"],
     href: "https://nietosegundavuelta.vercel.app/",
     external: true,
+    gradient: "from-emerald-600 via-teal-600 to-cyan-600",
+    icon: "📊",
   },
 ];
 
@@ -189,28 +195,36 @@ export default function Projects() {
             key={project.title}
             href={project.href}
             {...(project.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className={`group relative flex flex-col gap-3 rounded-md border border-[var(--border-color)] bg-[var(--canvas)] p-6 transition-all duration-300 ease-out hover:border-[var(--text-tertiary)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${visible ? "animate-fade-up" : "opacity-0"}`}
+            className={`group relative flex flex-col rounded-md border border-[var(--border-color)] bg-[var(--canvas)] overflow-hidden transition-all duration-300 ease-out hover:border-[var(--text-tertiary)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${visible ? "animate-fade-up" : "opacity-0"}`}
             style={visible ? { animationDelay: `${i * 80 + 80}ms` } : undefined}
           >
-            <div className="absolute left-0 top-6 h-0.5 w-0 rounded-r-sm bg-[var(--danger-high)] transition-all duration-300 ease-out group-hover:w-6" />
-            <h3 className="pl-3 text-base font-medium text-[var(--text-primary)] transition-colors group-hover:text-[var(--cyan-primary)]">
-              {project.title}
-            </h3>
-            <p className="pl-3 text-[13px] leading-[1.6] text-[var(--text-secondary)]">
-              {project.description}
-            </p>
-            <div className="mt-auto flex flex-wrap gap-1.5 pl-3">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-sm bg-[var(--bg-secondary)] px-2 py-[0.1875rem] font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[var(--text-secondary)] transition-colors group-hover:bg-[var(--bg-tertiary)] group-hover:text-[var(--text-primary)]"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className={`relative h-28 bg-gradient-to-br ${project.gradient} overflow-hidden transition-transform duration-300 ease-out group-hover:scale-105`}>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-4xl font-medium text-white/80">{project.icon}</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            </div>
+            <div className="flex flex-col gap-3 p-6">
+              <div className="absolute left-0 top-[7.5rem] h-0.5 w-0 rounded-r-sm bg-[var(--danger-high)] transition-all duration-300 ease-out group-hover:w-6" />
+              <h3 className="pl-3 text-base font-medium text-[var(--text-primary)] transition-colors group-hover:text-[var(--cyan-primary)]">
+                {project.title}
+              </h3>
+              <p className="pl-3 text-[13px] leading-[1.6] text-[var(--text-secondary)]">
+                {project.description}
+              </p>
+              <div className="mt-auto flex flex-wrap gap-1.5 pl-3">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-sm bg-[var(--bg-secondary)] px-2 py-[0.1875rem] font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[var(--text-secondary)] transition-colors group-hover:bg-[var(--bg-tertiary)] group-hover:text-[var(--text-primary)]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
             {project.external && (
-              <span className="absolute right-4 top-4 opacity-0 transition-opacity group-hover:opacity-100">
+              <span className="absolute right-4 top-[7.5rem] opacity-0 transition-opacity group-hover:opacity-100">
                 <svg className="h-4 w-4 text-[var(--text-tertiary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                 </svg>
