@@ -5,7 +5,8 @@
   --background: #F7F6F3;
   --foreground: #2D2D2D;
 
-  /* Game Simulator Design Tokens */
+  /* Core colors */
+  --canvas: #ffffff;
   --bg-primary: #F7F6F3;
   --bg-secondary: #F0EFEC;
   --bg-tertiary: #E8E6E1;
@@ -18,6 +19,7 @@
   --danger-high: #C53D43;
   --danger-max: #991B1B;
   --border-color: #E8E6E1;
+  --border-hover: #D1D5DB;
   --black: #FFFFFF;
 }
 

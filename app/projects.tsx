@@ -97,7 +97,7 @@ export default function Projects() {
       className="px-8 pt-10 pb-16 sm:px-16 lg:px-16"
     >
       <h2
-        className={`text-xs font-medium tracking-[0.5px] text-[#9CA3AF] uppercase ${visible ? "animate-fade-up" : "opacity-0"}`}
+        className={`text-xs font-medium tracking-[0.5px] text-[var(--text-tertiary)] uppercase ${visible ? "animate-fade-up" : "opacity-0"}`}
       >
         Projects
       </h2>
@@ -105,9 +105,9 @@ export default function Projects() {
       {/* Search + active filters */}
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div ref={wrapperRef} className="relative w-64">
-          <div className="flex items-center gap-2 rounded-sm border border-[#E8E6E1] bg-[#F7F6F3] px-3 py-2 focus-within:border-[#D1D5DB]">
+          <div className="flex items-center gap-2 rounded-sm border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 focus-within:border-[#D1D5DB]">
             <svg
-              className="h-3.5 w-3.5 shrink-0 text-[#9CA3AF]"
+              className="h-3.5 w-3.5 shrink-0 text-[var(--text-tertiary)]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -128,17 +128,17 @@ export default function Projects() {
               }}
               onFocus={() => setOpen(true)}
               placeholder="Filter by tech..."
-              className="w-full bg-transparent text-xs text-[#2D2D2D] placeholder-[#9CA3AF] outline-none"
+              className="w-full bg-transparent text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none"
             />
           </div>
 
           {open && suggestions.length > 0 && (
-            <ul className="absolute z-10 mt-0 w-full rounded-sm border border-[#E8E6E1] bg-white py-1">
+            <ul className="absolute z-10 mt-0 w-full rounded-sm border border-[var(--border-color)] bg-[var(--canvas)] py-1">
               {suggestions.map((tag) => (
                 <li key={tag}>
                   <button
                     onClick={() => addTag(tag)}
-                    className="w-full px-3.5 py-2 text-left text-xs text-[#6B7280] transition-colors hover:bg-[#F0EFEC] hover:text-[#2D2D2D]"
+                    className="w-full px-3.5 py-2 text-left text-xs text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]"
                   >
                     {tag}
                   </button>
@@ -154,7 +154,7 @@ export default function Projects() {
               <button
                 key={tag}
                 onClick={() => removeTag(tag)}
-                className="flex items-center gap-1.5 rounded-sm bg-[#2D2D2D] px-2 py-1 font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[#F7F6F3] transition-colors hover:bg-[#444]"
+                className="flex items-center gap-1.5 rounded-sm bg-[var(--text-primary)] px-2 py-1 font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[var(--bg-primary)] transition-colors hover:opacity-80"
               >
                 {tag}
                 <svg
@@ -174,7 +174,7 @@ export default function Projects() {
             ))}
             <button
               onClick={() => setActiveTags([])}
-              className="px-2 py-1 text-[11px] text-[#9CA3AF] transition-colors hover:text-[#6B7280]"
+              className="px-2 py-1 text-[11px] text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
             >
               Clear all
             </button>
@@ -189,21 +189,21 @@ export default function Projects() {
             key={project.title}
             href={project.href}
             {...(project.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className={`group flex flex-col gap-3 rounded-sm border border-[#E8E6E1] bg-transparent p-6 transition-colors hover:border-[#D1D5DB] ${visible ? "animate-fade-up" : "opacity-0"}`}
+            className={`group flex flex-col gap-3 rounded-sm border border-[var(--border-color)] bg-transparent p-6 transition-colors hover:border-[var(--text-tertiary)] ${visible ? "animate-fade-up" : "opacity-0"}`}
             style={visible ? { animationDelay: `${i * 80 + 80}ms` } : undefined}
           >
-            <div className="h-0.5 w-6 rounded-sm bg-[#C53D43]" />
-            <h3 className="text-base font-medium text-[#2D2D2D]">
+            <div className="h-0.5 w-6 rounded-sm bg-[var(--danger-high)]" />
+            <h3 className="text-base font-medium text-[var(--text-primary)]">
               {project.title}
             </h3>
-            <p className="text-[13px] leading-[1.5] text-[#6B7280]">
+            <p className="text-[13px] leading-[1.5] text-[var(--text-secondary)]">
               {project.description}
             </p>
             <div className="mt-auto flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-sm bg-[#F0EFEC] px-2 py-[0.1875rem] font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[#6B7280]"
+                  className="rounded-sm bg-[var(--bg-secondary)] px-2 py-[0.1875rem] font-[family-name:var(--font-ibm-plex-mono)] text-[11px] text-[var(--text-secondary)]"
                 >
                   {tag}
                 </span>
@@ -214,7 +214,7 @@ export default function Projects() {
       </div>
 
       {filtered.length === 0 && (
-        <p className="mt-8 text-sm text-[#9CA3AF]">
+        <p className="mt-8 text-sm text-[var(--text-tertiary)]">
           No projects match the selected filters.
         </p>
       )}
