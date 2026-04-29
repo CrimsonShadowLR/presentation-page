@@ -50,28 +50,57 @@ export default function Home() {
           >
             Experience &amp; Education
           </h2>
-          <div
-            className="animate-fade-up mt-4 flex flex-col gap-6 md:flex-row md:gap-16"
-            style={{ animationDelay: "480ms" }}
-          >
-            <div>
-              <p className="text-sm text-[var(--text-primary)]">{yearsOfExperience}+ years building software</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2" style={{ animationDelay: "480ms" }}>
+            {/* Years of Experience Badge */}
+            <div className="animate-fade-up group relative flex items-center gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--canvas)] p-4 transition-all duration-300 hover:border-[var(--cyan-primary)] hover:shadow-[0_4px_20px_rgba(61,90,128,0.15)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[var(--cyan-primary)]">
+                <svg
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 6L3 12l5 6M16 6l5 6-5 6"
+                  />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-semibold text-[var(--text-primary)]">{yearsOfExperience}+</span>
+                <span className="text-xs text-[var(--text-secondary)]">years building software</span>
+              </div>
             </div>
-            <div className="flex items-center gap-4">
+
+            {/* Education Card */}
+            <a
+              href="https://www.pucp.edu.pe/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="animate-fade-up group relative flex items-center gap-4 rounded-xl border border-[var(--border-color)] bg-[var(--canvas)] p-4 transition-all duration-300 hover:border-[var(--border-hover)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5"
+            >
               <img
                 src={education.logoUrl}
                 alt={`${education.institution} logo`}
-                className="h-8 w-auto object-contain"
+                className="h-12 w-12 shrink-0 rounded-lg object-contain p-1"
               />
-              <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-medium text-[var(--text-primary)]">
+              <div className="flex flex-1 flex-col">
+                <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--cyan-primary)] transition-colors">
                   {education.degree}
                 </span>
                 <span className="text-xs text-[var(--text-secondary)]">
-                  {education.institution} · {education.location} · {education.dates}
+                  {education.institution} · {education.location}
+                </span>
+                <span className="text-xs text-[var(--text-tertiary)]">
+                  {education.dates}
                 </span>
               </div>
-            </div>
+              <svg className="h-5 w-5 shrink-0 text-[var(--text-tertiary)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--text-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            </a>
           </div>
         </section>
 
