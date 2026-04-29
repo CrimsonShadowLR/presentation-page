@@ -1,6 +1,17 @@
 import Projects from "./projects";
 
+const education = {
+  institution: "Pontificia Universidad Católica del Perú",
+  location: "Lima, Peru",
+  degree: "B.Sc. Informatics Engineering",
+  dates: "2018 – 2022",
+  logoUrl: "https://upload.wikimedia.org/wikipedia/commons/d/dd/PUCP_logo.png",
+};
+
+const START_YEAR = 2019;
+
 export default function Home() {
+  const yearsOfExperience = new Date().getFullYear() - START_YEAR;
   return (
     <div className="min-h-screen bg-[#F7F6F3] text-[#2D2D2D] font-[family-name:var(--font-sora)]">
       {/* Hero */}
@@ -28,6 +39,39 @@ export default function Home() {
           I build clean, performant applications with modern technologies.
           Focused on crafting thoughtful user experiences and reliable systems.
         </p>
+      </section>
+
+      {/* Experience & Education */}
+      <section className="px-8 pb-12 sm:px-16 lg:px-16 max-w-[100rem] mx-auto w-full">
+        <h2
+          className="animate-fade-up text-xs font-medium tracking-[0.5px] text-[#9CA3AF] uppercase"
+          style={{ animationDelay: "400ms" }}
+        >
+          Experience & Education
+        </h2>
+        <div
+          className="animate-fade-up mt-4 flex flex-col gap-6 md:flex-row md:gap-16"
+          style={{ animationDelay: "480ms" }}
+        >
+          <div>
+            <p className="text-sm text-[#2D2D2D]">{yearsOfExperience}+ years building software</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <img
+              src={education.logoUrl}
+              alt={`${education.institution} logo`}
+              className="h-8 w-auto object-contain"
+            />
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-medium text-[#2D2D2D]">
+                {education.degree}
+              </span>
+              <span className="text-xs text-[#6B7280]">
+                {education.institution} · {education.location} · {education.dates}
+              </span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <Projects />
