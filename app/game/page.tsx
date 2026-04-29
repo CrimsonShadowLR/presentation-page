@@ -5,9 +5,10 @@ import { DualGameSimulator } from '@/components/game-simulator/DualGameSimulator
 import { WsComparisonPanel } from '@/components/game-simulator/WsComparisonPanel';
 
 export const metadata: Metadata = {
-  title: 'Game Simulator — Leandro Lazo',
+  title: 'Game Simulator',
   description:
-    'Real-time risk-based game comparing NestJS and Python asyncio WebSocket backends using binary MessagePack.',
+    'Real-time risk-based game comparing NestJS and Python asyncio WebSocket backends using binary MessagePack protocol.',
+  keywords: ['Game', 'WebSocket', 'NestJS', 'Python', 'TypeScript', 'Real-time'],
 };
 
 export default function GamePage() {
