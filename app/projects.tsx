@@ -6,8 +6,8 @@ const projects = [
   {
     title: "Game Simulator",
     description:
-      "Real-time risk-based game with a NestJS WebSocket backend. Binary MessagePack protocol over Socket.io, cryptographic RNG, in-memory session state, and live P&L tracking.",
-    tags: ["NestJS", "Next.js", "WebSocket", "TypeScript", "Socket.io"],
+      "Real-time risk-based game comparing NestJS, Python asyncio, and Go WebSocket backends. Binary MessagePack protocol, cryptographic RNG, in-memory session state, and live P&L tracking.",
+    tags: ["NestJS", "Python", "Go", "Next.js", "WebSocket", "TypeScript", "MessagePack"],
     href: "/game",
   },
   {
