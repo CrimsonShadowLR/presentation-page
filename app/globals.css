@@ -64,3 +64,24 @@ body {
   50% { transform: scale(1.1); opacity: 1; }
 }
 
+@keyframes drift {
+  0% {
+    left: -20%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 105%;
+    opacity: 0;
+  }
+}
+
+.animate-drift {
+  animation: drift linear infinite;
+}
+
