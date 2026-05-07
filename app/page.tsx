@@ -89,13 +89,13 @@ export default function Home() {
         <footer className="flex flex-col items-center justify-between gap-4 border-t border-[var(--border-color)] px-8 py-8 sm:flex-row sm:px-16 lg:px-16">
           <span className="text-xs text-[var(--text-muted)]">© 2026 Leandro Lazo</span>
           <div className="flex gap-5">
-            <a href="#" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+            <a href="https://github.com/CrimsonShadowLR" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
               GitHub
             </a>
-            <a href="#" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+            <a href="https://linkedin.com/in/leandrollr" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
               LinkedIn
             </a>
-            <a href="#" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+            <a href="mailto:llazolarosa@gmail.com" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
               Email
             </a>
           </div>
