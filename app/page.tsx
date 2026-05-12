@@ -1,6 +1,7 @@
 import Projects from "./projects";
 import Hero from "./components/Hero";
 import ParallaxBackground from "./components/ParallaxBackground";
+import TechStack from "./components/TechStack";
 
 const education = {
   institution: "Pontificia Universidad Católica del Perú",
@@ -82,6 +83,8 @@ export default function Home() {
             </div>
           </section>
         </ParallaxBackground>
+
+        <TechStack />
 
         <Projects />
 
