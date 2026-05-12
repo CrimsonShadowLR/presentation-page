@@ -44,6 +44,8 @@ next-env.d.ts
 .playwright-mcp/
 .unlighthouse/
 .claude/
+.agents/
+skills-lock.json
 
 # assets / design
 *.png
